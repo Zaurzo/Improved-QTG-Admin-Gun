@@ -1785,12 +1785,20 @@ if CLIENT then
 	end
 
 	function SWEP:ModeText(b)
+		local owner = self:GetOwner()
+
+		if not owner:IsValid() then
+			Text1 = ''
+			Text2 = ''
+			
+			return
+		end
+
 		if b == 1 then
 			if CurTime() > processDelay1 then
 				processDelay1 = CurTime() + 0.1
 
-				local p = self:GetOwner()
-				local Mode = p:GetNWInt('AdminGun_FireMode')
+				local Mode = owner:GetNWInt('AdminGun_FireMode')
 				local e2,wire,SerPly,SerNpc = getinfocounts()
 
 				Text1 = ''
@@ -1810,27 +1818,27 @@ if CLIENT then
 				elseif Mode == 6 then
 					Text1 = QAGL.RPG
 				elseif Mode == 7 then	
-					Text1 = p:GetNWBool('AdminGun_TimeStop') and QAGL.TimeStopOn or QAGL.TimeStopOff
+					Text1 = owner:GetNWBool('AdminGun_TimeStop') and QAGL.TimeStopOn or QAGL.TimeStopOff
 				elseif Mode == 8 then		
 					Text1 = QAGL.KillAllPLY
 				elseif Mode == 9 then	
 					Text1 = QAGL.KillAllNPC
 				elseif Mode == 10 then
-					Text1 = p:GetNWBool('AdminGun_Invisible') and QAGL.InvisibleOn or QAGL.InvisibleOff
+					Text1 = owner:GetNWBool('AdminGun_Invisible') and QAGL.InvisibleOn or QAGL.InvisibleOff
 				elseif Mode == 11 then
-					Text1 = QAGL.SetAllPlayerHeath..'('..p:GetNWInt('QTG_AdminGun_SetPlyHealth')..')'
+					Text1 = QAGL.SetAllPlayerHeath..'('..owner:GetNWInt('QTG_AdminGun_SetPlyHealth')..')'
 				elseif Mode == 12 then	
 					Text1 = QAGL.RemoveAllWireE2
 				elseif Mode == 13 then	
 					Text1 = QAGL.RemoveAllWire
 				elseif Mode == 14 then	
-					Text1 = p:GetNWBool('AdminGun_WallHack') and QAGL.WallHackOn or QAGL.WallHackOff
+					Text1 = owner:GetNWBool('AdminGun_WallHack') and QAGL.WallHackOn or QAGL.WallHackOff
 				elseif Mode == 15 then	
 					Text1 = QAGL.UniversalKill
 				elseif Mode == 16 then
 					Text1 = QAGL.FragGrenade
 				elseif Mode == 17 then
-					local MovingSpeed = p:GetNWInt('AdminGun_MovingSpeed')
+					local MovingSpeed = owner:GetNWInt('AdminGun_MovingSpeed')
 
 					if MovingSpeed == 0 then
 						Text1 = QAGL.MovingSpeedOff
@@ -1848,19 +1856,19 @@ if CLIENT then
 				elseif Mode == 18 then
 					Text1 = QAGL.Flechette
 				elseif Mode == 19 then
-					Text1 = p:GetNWBool('AdminGun_FlyMode') and QAGL.FlyOn or QAGL.FlyOff
+					Text1 = owner:GetNWBool('AdminGun_FlyMode') and QAGL.FlyOn or QAGL.FlyOff
 				elseif Mode == 20 then
 					Text1 = self:CanFireNukeBomb() and QAGL.NukeBombReady or QAGL.NukeBombNotReady
 				elseif Mode == 21 then
 					Text1 = QAGL.HelicopterBomb
 				elseif Mode == 22 then
-					Text1 = p:GetNWBool('AdminGun_SlowTime') and QAGL.SlowTimeOn or QAGL.SlowTimeOff
+					Text1 = owner:GetNWBool('AdminGun_SlowTime') and QAGL.SlowTimeOn or QAGL.SlowTimeOff
 				elseif Mode == 23 then
-					Text1 = p:GetNWBool('AdminGun_SpeedTime') and QAGL.SpeedTimeOn or QAGL.SpeedTimeOff
+					Text1 = owner:GetNWBool('AdminGun_SpeedTime') and QAGL.SpeedTimeOn or QAGL.SpeedTimeOff
 				elseif Mode == 24 then
 					Text1 = QAGL.Teleport
 				elseif Mode == 25 then
-					Text1 = p:GetNWBool('AdminGun_Defense') and QAGL.DefenseOn or QAGL.DefenseOff
+					Text1 = owner:GetNWBool('AdminGun_Defense') and QAGL.DefenseOn or QAGL.DefenseOff
 				elseif Mode == 26 then
 					Text1 = QAGL.PhysicalBullet
 				elseif Mode == 27 then
@@ -1875,8 +1883,7 @@ if CLIENT then
 			if CurTime() > processDelay2 then
 				processDelay2 = CurTime() + 0.1
 
-				local p = self:GetOwner()
-				local Mode = p:GetNWInt('AdminGun_FireMode')
+				local Mode = owner:GetNWInt('AdminGun_FireMode')
 				local e2,wire,SerPly,SerNpc = getinfocounts()
 
 				Text2 = ''

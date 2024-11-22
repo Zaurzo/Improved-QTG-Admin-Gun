@@ -395,7 +395,7 @@ do
 end
 
 hook.Add('Move','QTG_Move',function(p,m)
-	if !p:IsAdmin() then return end
+	if !p or !p:IsAdmin() then return end
 	local w = p:GetActiveWeapon()
 	if !w:IsValid() then return end
 
