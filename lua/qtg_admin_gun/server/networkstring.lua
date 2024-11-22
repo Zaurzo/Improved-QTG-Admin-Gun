@@ -1,0 +1,8 @@
+util.AddNetworkString('QTG_OpenMenu')
+util.AddNetworkString('QTG_miss')
+util.AddNetworkString('QTG_AGSMH')
+util.AddNetworkString('QTG_AGSPH')
+util.AddNetworkString('QTG_NPCD')
+util.AddNetworkString('QTG_SLT')
+util.AddNetworkString('QTG_SetServer')
+util.AddNetworkString('QTG_ReturnServer')

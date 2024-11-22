@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture"		"Neptune_QTG/gui/gradient_reverse"
+	"$ignorez"			1
+	"$vertexcolor" 		1
+	"$vertexalpha" 		1
+	"$nolod" 			1
+}
