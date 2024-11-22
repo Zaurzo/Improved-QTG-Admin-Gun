@@ -2032,7 +2032,7 @@ function SWEP:Think()
 								if e:GetSkin() != nil then
 									d:SetSkin(e:GetSkin())
 								end
-								d:SetMaterial(e:GetMaterial())
+								d:SetMaterial(e:GetMaterial() or '')
 								timer.Simple(3,function()
 									if IsValid(d) then
 										d:SetCollisionGroup(1)
@@ -2049,7 +2049,7 @@ function SWEP:Think()
 							e:Remove()
 
 							if d:IsValid() then
-								d:SetModel(e:GetModel())
+								d:SetModel(e:GetModel() or '')
 								d:SetPos(e:GetPos())
 								d:SetAngles(e:GetAngles())
 								d:Spawn()
@@ -2057,7 +2057,7 @@ function SWEP:Think()
 								if e:GetSkin() != nil then
 									d:SetSkin(e:GetSkin())
 								end
-								d:SetMaterial(e:GetMaterial())
+								d:SetMaterial(e:GetMaterial() or '')
 								local phys = d:GetPhysicsObject()
 								if phys:IsValid() then
 									phys:SetVelocity(((d:GetPos()-self:GetPos())*500+(d:GetPos()+d:GetForward()*400-self:GetPos())+(d:GetPos()+d:GetUp()*200-self:GetPos())*140))
