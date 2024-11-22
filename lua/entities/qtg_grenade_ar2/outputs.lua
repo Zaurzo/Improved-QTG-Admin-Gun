@@ -49,5 +49,3 @@ function ENT:Touch( pOther )
 	end
 
 end
-
-function ENT:OnThink() end

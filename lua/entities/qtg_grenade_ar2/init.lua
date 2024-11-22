@@ -45,12 +45,15 @@ function ENT:Initialize()
 
 end
 
+function ENT:GetSpawnTime()
+	local spawnTime = self.m_fSpawnTime
+
+	return spawnTime or CurTime()
+end
+
 function ENT:Think()
-
-	self:OnThink()
-
 	if (!self.m_bIsLive) then
-		if (self.m_fSpawnTime + MAX_AR2_NO_COLLIDE_TIME < CurTime()) then
+		if (self:GetSpawnTime() + MAX_AR2_NO_COLLIDE_TIME < CurTime()) then
 			self.m_bIsLive  = true
 		end
 	end
