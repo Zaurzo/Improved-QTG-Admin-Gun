@@ -889,8 +889,12 @@ function SWEP:FireModeList()
 							b:SetSaveValue('m_bWeaponLaunched',false)
 							b.IsQTGAdminGun = true
 							b.Gun = self
+							
 							local p = b:GetPhysicsObject()
-							p:SetVelocity(v:GetPos()-Vector(0,0,100)*self.Primary.Force)
+
+							if p:IsValid() then
+								p:SetVelocity(v:GetPos()-Vector(0,0,100)*self.Primary.Force)
+							end
 						end
 					end
 				end
@@ -909,8 +913,14 @@ function SWEP:FireModeList()
 					gren:SetPos(owner:GetShootPos() + owner:GetAimVector()*15 +Vector(math.Rand(10,-10),math.Rand(10,-10),math.Rand(10,-10))+ owner:GetRight() * 10 + owner:GetUp() * -10)
 					gren:SetOwner(owner) 
 					gren:Spawn()
-					gren:GetPhysicsObject():SetVelocity( Forward* 1e9 )
-					gren:GetPhysicsObject():SetAngles( owner:GetAngles() )
+
+					local p = gren:GetPhysicsObject()
+
+					if p:IsValid() then
+						p:SetVelocity( Forward* 1e9 )
+						p:SetAngles( owner:GetAngles() )
+					end
+
 					gren:SetVelocity( gren:GetForward() * 1e9 )
 					gren:Activate()
 				end
@@ -1252,7 +1262,7 @@ function SWEP:FireModeList()
 					local phys = frag:GetPhysicsObject()
 
 					if phys:IsValid() then
-						frag:GetPhysicsObject():ApplyForceCenter(owner:GetAimVector()*4000)
+						phys:ApplyForceCenter(owner:GetAimVector()*4000)
 					end
 
 					frag:SetAngles(owner:EyeAngles() + Angle(90,0,0))
@@ -1382,8 +1392,13 @@ function SWEP:FireModeList()
 				ent:SetAngles( owner:EyeAngles() )
 				ent:Spawn()
 				ent:SetOwner(owner)
+
 				local phys = ent:GetPhysicsObject()
-				if IsValid(phys) then phys:Wake() phys:SetVelocity(ent:GetForward() * 1500) end
+
+				if phys:IsValid() then 
+					phys:Wake() 
+					phys:SetVelocity(ent:GetForward() * 1500) 
+				end
 			end
 		end	
 	elseif owner:GetNWInt('AdminGun_FireMode') == 21 then
@@ -1398,7 +1413,13 @@ function SWEP:FireModeList()
 				e:SetAngles(owner:EyeAngles())
 				e:Spawn()
 				e:SetOwner(owner)
-				e:GetPhysicsObject():SetVelocity(f*1e9)
+
+				local p = e:GetPhysicsObject()
+
+				if p:IsValid() then
+					e:GetPhysicsObject():SetVelocity(f*1e9)
+				end
+
 				e.IsQTGAdminGun = true
 				e.Gun = self
 			end
@@ -1530,8 +1551,12 @@ function SWEP:FireModeList()
 				e:SetAngles(owner:EyeAngles())
 				e:Spawn()
 				e:SetOwner(owner)
+				
 				local ph = e:GetPhysicsObject()
-				ph:SetVelocity(c:Forward()*1e9)
+
+				if ph:IsValid() then
+					ph:SetVelocity(c:Forward()*1e9)
+				end
 			end
 		end	
 	elseif owner:GetNWInt('AdminGun_FireMode') == 27 then
@@ -1546,7 +1571,7 @@ function SWEP:FireModeList()
 				e:SetAngles(owner:EyeAngles())
 				e:Spawn()
 				e:SetOwner(owner)
-				
+
 				local ph = e:GetPhysicsObject()
 
 				if ph:IsValid() then
