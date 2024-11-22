@@ -9,24 +9,25 @@ ENT.AdminOnly		= false
 ENT.Radius 			= 10
 ENT.RenderGroup 	= RENDERGROUP_TRANSLUCENT
 
-local selfent
 if SERVER then
 	function ENT:Initialize()
-		if CLIENT then return end
-		selfent = self
 		self:_QTGSetModel('models/props_combine/breenglobe.mdl',self:QTGGetKey())
 		self:QTGIntPhy()
 		self:DrawShadow(false)
+
 		local phys = self:GetPhysicsObject()
-		phys:EnableGravity(false)
+
+		if phys:IsValid() then
+			phys:EnableGravity(false)
+		end
 	end
 	function ENT:QTGIntPhy()
-		if selfent:IsValid() then
-			selfent:_QTGPhysicsInit(SOLID_VPHYSICS,self:QTGGetKey())
+		if self:IsValid() then
+			self:_QTGPhysicsInit(SOLID_VPHYSICS,self:QTGGetKey())
 		end
-		selfent:_QTGSetMoveType(MOVETYPE_VPHYSICS,self:QTGGetKey())
-		selfent:_QTGSetSolid(SOLID_BBOX,self:QTGGetKey())
-		selfent:_QTGSetCollisionGroup(1,self:QTGGetKey())
+		self:_QTGSetMoveType(MOVETYPE_VPHYSICS,self:QTGGetKey())
+		self:_QTGSetSolid(SOLID_BBOX,self:QTGGetKey())
+		self:_QTGSetCollisionGroup(1,self:QTGGetKey())
 	end
 	function ENT:QTGThink()
 		local ph = self:GetPhysicsObject()

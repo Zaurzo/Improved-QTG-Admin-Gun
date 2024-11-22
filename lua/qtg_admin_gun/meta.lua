@@ -92,8 +92,11 @@ local function OverrideFunction(m,n,b,r,t)
 
 	m['_QTG' .. n] = function(self,...)
 		local args = {...}
+		local index = #args
 
-		if args[#args] == K then
+		if args[index] == K then
+			args[index] = nil
+
 			return oldFunc(self,...)
 		end
 	end

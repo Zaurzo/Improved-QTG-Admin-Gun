@@ -1546,8 +1546,12 @@ function SWEP:FireModeList()
 				e:SetAngles(owner:EyeAngles())
 				e:Spawn()
 				e:SetOwner(owner)
+				
 				local ph = e:GetPhysicsObject()
-				ph:SetVelocity(c:Forward()*1e9)
+
+				if ph:IsValid() then
+					ph:SetVelocity(c:Forward()*1e9)
+				end
 			end
 		end	
 	end
