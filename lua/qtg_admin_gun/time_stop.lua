@@ -133,6 +133,8 @@ function QTG_TimeStop(e,b)
 	end
 end
 
+local Entity = Entity
+
 local function QTG_TimeStopThink()
 	if Time_Stop_Enabled then
 		for i, v in pairs(Time_Stop_Datatable) do
@@ -165,6 +167,8 @@ local function QTG_TimeStopThink()
 			elseif v.type == TS_DOLL then
 				for c = 0, ent:GetPhysicsObjectCount() - 1 do
 					local phy = ent:GetPhysicsObjectNum( c )
+					if not phy:IsValid() then continue end
+
 					if phy:GetVelocity():Length() > 0 then
 						if Time_Stop_Datatable[ i ].vel[ c ]:Length() - 50 < phy:GetVelocity():Length() then
 							Time_Stop_Datatable[ i ].vel[ c ] = phy:GetVelocity()
