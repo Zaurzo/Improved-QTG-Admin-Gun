@@ -2386,7 +2386,7 @@ function SWEP:StartGuiding()
 
 	local e = self:GetOwner()
 
-	if !e:IsNPC() then
+	if e:IsValid() and !e:IsNPC() then
 		e:EmitSound(RPGLaserOn)
 		self:CreateLaserPointer(e)
 	end
