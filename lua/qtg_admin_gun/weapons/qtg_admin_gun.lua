@@ -111,6 +111,8 @@ SWEP.Kind 							= WEAPON_EQUIP2
 SWEP.CanBuy 						= {ROLE_TRAITOR}
 SWEP.LimitedStock 					= true
 
+local file = table.Copy(file)
+
 if isttt then
 	SWEP.Primary.ClipSize 			= 5
 	SWEP.Primary.DefaultClip 		= 5
