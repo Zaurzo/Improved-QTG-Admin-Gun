@@ -21,7 +21,7 @@ GRENADE_TIMER = 1
 function		ENT:GetShakeAmplitude() return 25.0 end
 function		ENT:GetShakeRadius() return 750.0 end
 
-// Damage accessors.
+-- Damage accessors.
 function ENT:GetDamage()
 	return self.m_flDamage
 end
@@ -37,19 +37,19 @@ function ENT:SetDamageRadius(flDamageRadius)
 	self.m_DmgRadius = flDamageRadius
 end
 
-// Bounce sound accessors.
+-- Bounce sound accessors.
 function ENT:SetBounceSound( pszBounceSound )
 	self.m_iszBounceSound = tostring( pszBounceSound )
 end
 
 function	ENT:BlipSound() self:EmitSound( self.Sound.Blip ) end
 
-// UNDONE: temporary scorching for PreAlpha - find a less sleazy permenant solution.
+-- UNDONE: temporary scorching for PreAlpha - find a less sleazy permenant solution.
 function ENT:Explode( pTrace, bitsDamageType )
 
 if !( CLIENT ) then
 
-	self:SetModel( "" )//invisible
+	self:SetModel( "" )--invisible
 	self:SetColor( color_transparent )
 	self:SetSolid( SOLID_NONE )
 
@@ -62,13 +62,13 @@ if !( CLIENT ) then
 		local vecNormal = pTrace.HitNormal
 		local pdata = pTrace.MatType
 
-		util.BlastDamage( self, // don't apply cl_interp delay
+		util.BlastDamage( self, -- don't apply cl_interp delay
 			self:GetOwner(),
 			self:GetPos(),
 			500,
 			1e9 )
 	else
-		util.BlastDamage( self, // don't apply cl_interp delay
+		util.BlastDamage( self, -- don't apply cl_interp delay
 			self:GetOwner(),
 			self:GetPos(),
 			500,
@@ -84,12 +84,12 @@ if !( CLIENT ) then
 	self.Touch = function( ... ) return end
 	self:SetSolid( SOLID_NONE )
 
-	// Because the grenade is zipped out of the world instantly, the EXPLOSION sound that it makes for
-	// the AI is also immediately destroyed. For this reason, we now make the grenade entity inert and
-	// throw it away in 1/10th of a second instead of right away. Removing the grenade instantly causes
-	// intermittent bugs with env_microphones who are listening for explosions. They will 'randomly' not
-	// hear explosion sounds when the grenade is removed and the SoundEnt thinks (and removes the sound)
-	// before the env_microphone thinks and hears the sound.
+	-- Because the grenade is zipped out of the world instantly, the EXPLOSION sound that it makes for
+	-- the AI is also immediately destroyed. For this reason, we now make the grenade entity inert and
+	-- throw it away in 1/10th of a second instead of right away. Removing the grenade instantly causes
+	-- intermittent bugs with env_microphones who are listening for explosions. They will 'randomly' not
+	-- hear explosion sounds when the grenade is removed and the SoundEnt thinks (and removes the sound)
+	-- before the env_microphone thinks and hears the sound.
 	SafeRemoveEntityDelayed( self, 0.1 )
 
 end
@@ -99,7 +99,7 @@ end
 function ENT:Detonate()
 
 	local		tr
-	local		vecSpot// trace starts here!
+	local		vecSpot-- trace starts here!
 
 	self.Think = function( ... ) return end
 
@@ -113,9 +113,9 @@ function ENT:Detonate()
 	tr = util.TraceLine ( tr)
 
 	if( tr.StartSolid ) then
-		// Since we blindly moved the explosion origin vertically, we may have inadvertently moved the explosion into a solid,
-		// in which case nothing is going to be harmed by the grenade's explosion because all subsequent traces will startsolid.
-		// If this is the case, we do the downward trace again from the actual origin of the grenade. (sjb) 3/8/2007  (for ep2_outland_09)
+		-- Since we blindly moved the explosion origin vertically, we may have inadvertently moved the explosion into a solid,
+		-- in which case nothing is going to be harmed by the grenade's explosion because all subsequent traces will startsolid.
+		-- If this is the case, we do the downward trace again from the actual origin of the grenade. (sjb) 3/8/2007  (for ep2_outland_09)
 		tr = {}
 		tr.start = self:GetPos()
 		tr.endpos = self:GetPos() + Vector( 0, 0, -32)
@@ -169,12 +169,12 @@ function ENT:Initialize()
 
 end
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Purpose:
+-------------------------------------------------------------------------------
 function ENT:OnRestore()
 
-	// If we were primed and ready to detonate, put FX on us.
+	-- If we were primed and ready to detonate, put FX on us.
 	if (self.m_flDetonateTime > 0) then
 		self:CreateEffects()
 	end
@@ -183,29 +183,30 @@ function ENT:OnRestore()
 
 end
 
-//-----------------------------------------------------------------------------
-// Purpose:
-//-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Purpose:
+-------------------------------------------------------------------------------
 function ENT:CreateEffects()
 
 	local	nAttachment = self:LookupAttachment( "fuse" )
 
-	// Start up the eye trail
+	-- Start up the eye trail
 	self.m_pGlowTrail	= util.SpriteTrail( self, nAttachment, self.Trail.Color, true, self.Trail.StartWidth, self.Trail.EndWidth, self.Trail.LifeTime, 1 / ( self.Trail.StartWidth + self.Trail.EndWidth ) * 0.5, self.Trail.Material )
 
 end
 
 function ENT:CreateVPhysics()
 
-	// Create the object in the physics system
-	self:PhysicsInit( SOLID_VPHYSICS, 0, false )
+	self:PhysicsInit( SOLID_VPHYSICS )
 
 	local Phys = self:GetPhysicsObject()
+
 	if ( Phys and Phys:IsValid() ) then
 
 		Phys:SetMaterial( "grenade" )
 
 	end
+
 	return true
 
 end
@@ -281,10 +282,10 @@ end
 ---------------------------------------------------------*/
 function ENT:OnTakeDamage( dmginfo )
 
-	// Manually apply vphysics because BaseCombatCharacter takedamage doesn't call back to CBaseEntity OnTakeDamage
+	-- Manually apply vphysics because BaseCombatCharacter takedamage doesn't call back to CBaseEntity OnTakeDamage
 	self:TakePhysicsDamage( dmginfo )
 
-	// Grenades only suffer blast damage and burn damage.
+	-- Grenades only suffer blast damage and burn damage.
 	if( !(dmginfo:GetDamageType() == bit.bor( DMG_BLAST, DMG_BURN) ) ) then
 		return 0
 	end
