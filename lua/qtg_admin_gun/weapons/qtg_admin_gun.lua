@@ -1551,7 +1551,7 @@ function SWEP:FireModeList()
 				e:SetAngles(owner:EyeAngles())
 				e:Spawn()
 				e:SetOwner(owner)
-				
+
 				local ph = e:GetPhysicsObject()
 
 				if ph:IsValid() then
@@ -1604,13 +1604,19 @@ if SERVER then
 		if !p:IsValid() then return end
 
 		local p = net.ReadEntity()
-		p:SetNWInt('QTG_AdminGun_SetMyHealth',net.ReadFloat())
+
+		if IsValid(p) then
+			p:SetNWInt('QTG_AdminGun_SetMyHealth',net.ReadFloat())
+		end
 	end)
 	net.Receive('QTG_AGSPH',function(_,p)
 		if !p:IsValid() then return end
 
 		local p = net.ReadEntity()
-		p:SetNWInt('QTG_AdminGun_SetPlyHealth',net.ReadFloat())
+
+		if IsValid(p) then
+			p:SetNWInt('QTG_AdminGun_SetPlyHealth',net.ReadFloat())
+		end
 	end)
 
 	local isfunction = isfunction
