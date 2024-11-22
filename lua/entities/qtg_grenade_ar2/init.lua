@@ -48,7 +48,12 @@ end
 function ENT:GetSpawnTime()
 	local spawnTime = self.m_fSpawnTime
 
-	return spawnTime or CurTime()
+	if not spawnTime then
+		spawnTime = CurTime()
+		self.m_fSpawnTime = spawnTime
+	end
+
+	return spawnTime
 end
 
 function ENT:Think()
