@@ -193,13 +193,15 @@ local entitiesf do
 	hook.Add('OnEntityCreated','QTG_EntityIter',iterreset)
 	hook.Add('EntityRemoved','QTG_EntityIter',iterreset)
 
+	local isentity = isentity
+
 	local function eiter(t,i)
 		i = i+1
 
 		local v = t[i]
 		if !v then return end
 
-		if !v:IsValid() then
+		if !isentity(v) or !v:IsValid() then
 			return eiter(t,i+1)
 		end
 
@@ -212,7 +214,7 @@ local entitiesf do
 		local v = t[i]
 		if !v then return end
 
-		if !v:IsValid() or !v:IsPlayer() then
+		if !isentity(v) or !v:IsValid() or !v:IsPlayer() then
 			return eiter(t,i+1)
 		end
 
