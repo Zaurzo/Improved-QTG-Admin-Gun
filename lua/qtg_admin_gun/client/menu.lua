@@ -198,8 +198,12 @@ function QMENU:AddOption(b,t)
 		end
 		surface.DrawRect(0, 0, w, h)
 		surface.SetFont('QM_Mode')
+		
 		local str = string.upper(t[1]) .. string.sub(t,2)
 		local TextW, TextH = surface.GetTextSize(str)
+
+		if not TextW or not TextH then return end
+		
 		surface.SetTextColor(200, 200, 200)
 		surface.SetTextPos(w/2-TextW/2,h/2-TextH/2)
 		surface.DrawText(str)
