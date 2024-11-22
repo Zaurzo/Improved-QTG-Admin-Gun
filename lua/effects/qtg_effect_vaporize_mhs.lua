@@ -1,12 +1,15 @@
 AddCSLuaFile()
 
 function EFFECT:Init(data)
-	self.start = data:GetOrigin()
+	local startPos = data:GetOrigin()
+	local emitter = ParticleEmitter(startPos)
 
-	self.Emitter = ParticleEmitter(self.start)
+	self.start = startPos
+
+	if not emitter then return end
 
 	for i = 1, 50 do
-		local p = self.Emitter:Add("effects/fleck_antlion"..math.random(1,2), self.start + Vector(math.Rand(-8, 8), math.Rand(-8, 8), math.Rand(-32, 32)))
+		local p = emitter:Add("effects/fleck_antlion"..math.random(1,2), startPos + Vector(math.Rand(-8, 8), math.Rand(-8, 8), math.Rand(-32, 32)))
 		p:SetVelocity(VectorRand() * 64)
 		p:SetLifeTime(math.Rand(-0.3, 0.1))
 		p:SetDieTime(math.Rand(0.7, 1))
@@ -20,7 +23,7 @@ function EFFECT:Init(data)
 	end
 		
 	for i = 1, 20 do
-		local p = self.Emitter:Add("particles/smokey", self.start + Vector(math.Rand(-8, 9), math.Rand(-8, 8), math.Rand(-32, 32)))
+		local p = emitter:Add("particles/smokey", startPos + Vector(math.Rand(-8, 9), math.Rand(-8, 8), math.Rand(-32, 32)))
 		p:SetVelocity(VectorRand() * 64)
 		p:SetDieTime(math.Rand(0.4, 0.8))
 		p:SetStartAlpha(255)
@@ -32,7 +35,9 @@ function EFFECT:Init(data)
 		p:SetColor(20, 20, 20)	
 	end
 
-	self.Emitter:Finish()
+	emitter:Finish()
+
+	self.Emitter = emitter
 end
 
 function EFFECT:Think()
