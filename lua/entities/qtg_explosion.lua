@@ -19,6 +19,34 @@ local ReplaceList2 = {
 	'func_physbox'
 }
 
+local function createReplacement(e)
+	local d = ents.Create('prop_physics')
+	if not d:IsValid() then return end
+
+	local model = e:GetModel()
+	local skin = e:GetSkin()
+	local mat = e:GetMaterial()
+
+	if model then
+		d:SetModel(model)
+	end
+
+	if skin then
+		d:SetSkin(skin)
+	end
+
+	if mat then
+		d:SetMaterial(mat)
+	end
+
+	d:SetPos(e:GetPos())
+	d:SetAngles(e:GetAngles())
+	d:Spawn()
+	d:Activate()
+
+	return d
+end
+
 function ENT:Initialize()
 	local o = self:GetOwner()
 	if !o:IsValid() then return end
@@ -44,23 +72,19 @@ function ENT:Initialize()
 		for _,e in ipairs(ents.FindInSphere(self:GetPos(),self.Radius)) do
 			for k, v in pairs(ReplaceList) do
 				if e:IsValid() and e:GetClass() == v then
-					local d = ents.Create('prop_physics')
-					d:SetModel(e:GetModel())
-					d:SetPos(e:GetPos())
-					d:SetAngles(e:GetAngles())
-					d:Spawn()
-					d:Activate()
-					if e:GetSkin() != nil then
-						d:SetSkin(e:GetSkin())
-					end
-					d:SetMaterial(e:GetMaterial())
 					e:Remove()
+
+					local d = createReplacement(e)
+					if not d then continue end
+
 					timer.Simple(3,function()
 						if d:IsValid() then
 							d:SetCollisionGroup(1)
 						end
 					end)
+
 					local phys = d:GetPhysicsObject()
+
 					if phys:IsValid() then
 						phys:SetVelocity(((d:GetPos()-self:GetPos())*500+(d:GetPos()+d:GetForward()*400-self:GetPos())+(d:GetPos()+d:GetUp()*200-self:GetPos())*140))
 					end
@@ -68,24 +92,20 @@ function ENT:Initialize()
 			end
 			for k, v in pairs(ReplaceList2) do
 				if e:IsValid() and e:GetClass() == v then
-					local d = ents.Create('prop_physics')
-					d:SetModel(e:GetModel())
-					d:SetPos(e:GetPos())
-					d:SetAngles(e:GetAngles())
-					d:Spawn()
-					d:Activate()
-					if e:GetSkin() != nil then
-						d:SetSkin(e:GetSkin())
-					end
-					d:SetMaterial(e:GetMaterial())
 					e:Remove()
+
+					local d = createReplacement(e)
+					if not d then continue end
+
 					local phys = d:GetPhysicsObject()
+
 					if phys:IsValid() then
 						phys:SetVelocity(((d:GetPos() -self:GetPos()) *500 +(d:GetPos() +d:GetForward() *400 -self:GetPos()) +(d:GetPos() +d:GetUp() *200 -self:GetPos()) *140))
 					end
 				end
 			end
 		end
+		
 		self:Remove()
 	else
 		local effectdata = EffectData()
