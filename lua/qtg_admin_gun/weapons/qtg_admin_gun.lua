@@ -1958,12 +1958,13 @@ local color_red = Color(255, 0, 0)
 
 function SWEP:Think()
 	local o = self:GetOwner()
+	local isValid = IsValid(o)
 
 	if o:IsPlayer() and !self.QTG_Initialized then
 		self:Initialize()
 	end
 
-	if SERVER and o:IsValid() and o:IsPlayer() then
+	if SERVER and isValid and o:IsPlayer() then
 		local rainbow = o.QTG_AdminGun_GunRainbowLaser_Cvar
 		local playerRainbow = o.QTG_AdminGun_GunMakePlayerRainbow_Cvar
 
@@ -1988,7 +1989,7 @@ function SWEP:Think()
 	end
 
 	if !isttt then
-		if SERVER and o:IsValid() then
+		if SERVER and isValid then
 			if o:GetNWBool('AdminGun_FlyMode') then
 				o:RemoveFlags(1) -- Remove FL_ONGROUND flag
 			end
@@ -2108,7 +2109,7 @@ function SWEP:Think()
 				end
 			end
 		elseif !o:IsNPC() then
-			if o:IsValid() then
+			if isValid then
 				net_Start('QTG_AGSMH')
 					net.WriteEntity(o)
 					net.WriteFloat(GetConVar('QTG_AdminGun_SetMyHealth'):GetInt())
@@ -2121,7 +2122,7 @@ function SWEP:Think()
 		end
 	end
 
-	if o:IsValid() and !o:IsNPC() then
+	if isValid and !o:IsNPC() then
 		if self:GetZoomLvl() != 0 then
 			self.DrawCrosshair = false
 		else
@@ -2147,7 +2148,7 @@ end
 function SWEP:WeaponThink()
 	local o = self:GetOwner()
 
-	if o:IsValid() then 
+	if IsValid(o) then 
 		if o:IsPlayer() then
 			local picke = o:GetInternalVariable('m_hUseEntity')
 			local v = o.qtgisholdinge
