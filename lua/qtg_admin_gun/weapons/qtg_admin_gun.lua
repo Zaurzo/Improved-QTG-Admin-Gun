@@ -1625,7 +1625,7 @@ if SERVER then
 		if !p:IsValid() then return end
 
 		local n = net.ReadEntity()
-		if !n:IsValid() then return end
+		if !IsValid(n) then return end
 
 		if !n:IsNPC() then
 			n:SetNWInt('QTG_AdminGun_IsGoodNpc',0)
