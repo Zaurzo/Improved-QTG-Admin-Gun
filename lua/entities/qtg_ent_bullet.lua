@@ -5,10 +5,14 @@ ENT.Base 			= 'base_anim'
 ENT.Spawnable		= false
 ENT.AdminOnly		= false
 
-local selfent
 local function GiveEntDamage(self,e)
 	local d = DamageInfo()
-	d:SetAttacker(self:GetOwner() or NULL)
+	local owner = self:GetOwner()
+
+	if owner:IsValid() then
+		d:SetAttacker(owner)
+	end
+
 	d:SetInflictor(self)
 	d:SetDamageType(bit.bor(DMG_AIRBOAT,DMG_BLAST))
 	d:SetDamage(1e9)
@@ -22,7 +26,6 @@ end
 	
 if SERVER then
 	function ENT:Initialize()
-		selfent = self
 		self:_QTGSetModel('models/Items/AR2_Grenade.mdl',self:QTGGetKey())
 		self:SetMaterial('models/debug/debugwhite')
 		self:SetColor(Color(50,50,0))
@@ -31,16 +34,18 @@ if SERVER then
 		self:QTGIntPhy()
 		self:DrawShadow(true)
 		util.SpriteTrail(self,0,Color(255,100,0,255),true,2,0,0.06,0,'effects/beam_generic01')
+		
 		local phys = self:GetPhysicsObject()
-		phys:EnableGravity(false)
+
+		if phys:IsValid() then
+			phys:EnableGravity(false)
+		end
 	end
 	function ENT:QTGIntPhy()
-		if selfent:IsValid() then
-			selfent:_QTGPhysicsInit(SOLID_VPHYSICS,self:QTGGetKey())
-		end
-		selfent:_QTGSetMoveType(MOVETYPE_VPHYSICS,self:QTGGetKey())
-		selfent:_QTGSetSolid(SOLID_BBOX,self:QTGGetKey())
-		selfent:_QTGSetCollisionGroup(1,self:QTGGetKey())
+		self:_QTGPhysicsInit(SOLID_VPHYSICS,self:QTGGetKey())
+		self:_QTGSetMoveType(MOVETYPE_VPHYSICS,self:QTGGetKey())
+		self:_QTGSetSolid(SOLID_BBOX,self:QTGGetKey())
+		self:_QTGSetCollisionGroup(1,self:QTGGetKey())
 	end
 	function ENT:QTGThink()
 		local ph = self:GetPhysicsObject()
