@@ -61,14 +61,13 @@ end
 
 function ENT:Think()
 	local owner = self:GetOwner()
+	if not IsValid(owner) then owner = self end
 		
 	i = i + 500
 		
 	util.ScreenShake(self:GetPos(), 3, 3, 1, 9999999)
 			
 	for k, v in pairs(ents.FindInSphere(self:GetPos(), i)) do
-		if not IsValid(owner) then owner = self end
-		
 		constraint.RemoveAll(v)
 		
 		if string.find(v:GetClass(), "prop") != nil then
@@ -76,7 +75,6 @@ function ENT:Think()
 		end
 			
 		if CurTime() - self.Time > 0 then
-		
 			if v:GetClass() == "func_breakable" then v:Fire("break", "", i) end
 			
 			if IsValid(v) and v:IsPlayer() and v:GetActiveWeaponClass() != "qtg_admin_gun" then
@@ -135,7 +133,9 @@ function ENT:Think()
 		local phys = v:GetPhysicsObject()
 			
 		if v:GetMoveType() != 6 or not IsValid(phys) then
-			v:SetVelocity((v:GetPos() - self:GetPos()):GetNormal() * 700)
+			if v:IsValid() then
+				v:SetVelocity((v:GetPos() - self:GetPos()):GetNormal() * 700)
+			end
 		elseif phys:IsValid() then
 			if v:GetClass() == "prop_ragdoll" then
 				if math.random(1, 10) == 5 then 
