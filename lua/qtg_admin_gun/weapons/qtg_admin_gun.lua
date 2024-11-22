@@ -2614,7 +2614,7 @@ do
 					ft = GetConVar('QTG_AdminGun_FireType')
 				end
 
-				local fn = ft:GetInt()
+				local fn = ft and ft:GetInt()
 
 				if fn and p:GetNWInt('QTG_AdminGun_FireType') ~= fn then
 					net_Start('QTG_SetServer')
