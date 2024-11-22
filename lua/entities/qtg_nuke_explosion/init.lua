@@ -108,7 +108,7 @@ function ENT:Think()
 			end
 			if IsValid(v) && (v:GetClass() == "prop_door_rotating" || v:GetClass() == "prop_door" || v:GetClass() == "func_door_rotating" || v:GetClass() == "func_door") && v:Visible(self) then
 				local door = ents.Create("prop_physics")
-				door:SetModel(v:GetModel())
+				door:SetModel(v:GetModel() or '')
 				door:SetPos(v:GetPos())
 				door:SetAngles(v:GetAngles())
 				door:Spawn()
@@ -116,7 +116,7 @@ function ENT:Think()
 				if v:GetSkin() != nil then
 					door:SetSkin(v:GetSkin())
 				end
-				door:SetMaterial(v:GetMaterial())
+				door:SetMaterial(v:GetMaterial() or '')
 				v:QTGRemove14()
 				timer.Simple(3,function()
 					if IsValid(door) then
