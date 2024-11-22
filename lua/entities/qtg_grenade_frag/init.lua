@@ -58,18 +58,21 @@ if !( CLIENT ) then
 	local vecAbsOrigin = self:GetPos()
 	local contents = util.PointContents ( vecAbsOrigin )
 
+	local owner = self:GetOwner()
+	if not owner:IsValid() then owner = self end
+
 	if ( pTrace.Fraction != 1.0 ) then
 		local vecNormal = pTrace.HitNormal
 		local pdata = pTrace.MatType
 
 		util.BlastDamage( self, -- don't apply cl_interp delay
-			self:GetOwner(),
+			owner,
 			self:GetPos(),
 			500,
 			1e9 )
 	else
 		util.BlastDamage( self, -- don't apply cl_interp delay
-			self:GetOwner(),
+			owner,
 			self:GetPos(),
 			500,
 			1e9 )
