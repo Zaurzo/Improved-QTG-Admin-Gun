@@ -73,6 +73,10 @@ function QMENU:Init()
 
 	-- Prevent the user spamming keys being held down (e.g. w/s/a/d) when you select it
 	function searchbar:AllowInput()
+		if not self.allowtime then
+			self.allowtime = CurTime()
+		end
+		
 		if self.allowtime > CurTime() then
 			self.allowtime = CurTime() + 0.1
 
