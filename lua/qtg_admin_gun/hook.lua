@@ -3,6 +3,14 @@ local A1 = math.random(1,9999)
 local D2 = math.random(1,9999)
 local A2 = math.random(1,9999)
 
+local function getActiveWeaponClass(e)
+	if not IsValid(e) or not e.GetActiveWeapon then return end
+
+	local wep = e:GetActiveWeapon()
+
+	return wep:IsValid() and wep:GetClass()
+end
+
 if CLIENT then
 	local vector_one = Vector(1, 1, 1)
 
@@ -10,7 +18,7 @@ if CLIENT then
 		local p = LocalPlayer()
 		if !p:IsValid() then return end
 
-		if p:GetActiveWeaponClass() == 'qtg_admin_gun' then
+		if getActiveWeaponClass(p) == 'qtg_admin_gun' then
 			if !p.hasqtggunequipped then
 				p.hasqtggunequipped = true
 			end
@@ -160,7 +168,7 @@ hook.Add('EntityTakeDamage','QTG_AdminGunSetDamage',function(e,d)
 			return true
 		end
 
-		if e:IsPlayer() and e:GetActiveWeaponClass() == 'qtg_admin_gun' and SERVER then
+		if e:IsPlayer() and getActiveWeaponClass(e) == 'qtg_admin_gun' and SERVER then
 			net.Start('QTG_miss')
 			net.WriteEntity(e)
 			net.WriteVector(e:EyePos())
@@ -202,19 +210,19 @@ hook.Add('PopulateToolMenu','QTG_AdminGunSettings',function()
 end)
 
 hook.Add('PlayerFootstep','QTG_FootStep',function(p,po,f,s,v,r)
-	if p:GetActiveWeaponClass() == 'qtg_admin_gun' and p:GetNWBool('AdminGun_Invisible') then
+	if p.GetActiveWeaponClass and getActiveWeaponClass(p) == 'qtg_admin_gun' and p:GetNWBool('AdminGun_Invisible') then
 		return true
 	end	
 end)
 
 hook.Add('GetFallDamage', 'QTG_DamageMiss', function(p,s)
-	if p:GetActiveWeaponClass() == 'qtg_admin_gun' then
+	if getActiveWeaponClass(p) == 'qtg_admin_gun' then
 		return 0
 	end
 end)
 
 hook.Add('PhysgunPickup', 'QTG_CantPickup', function(p,s)
-	if p:GetActiveWeaponClass() == 'qtg_admin_gun' then
+	if getActiveWeaponClass(p) == 'qtg_admin_gun' then
 		return false
 	end	
 end)
@@ -222,7 +230,7 @@ end)
 hook.Add('PlayerSpawnedNPC', 'QTG_Player_Spawn_NPC', function(p,e)
 	if !IsValid(p) or !IsValid(e) then return end
 
-	if !p:IsAdmin() and e:IsNPC() and e:GetActiveWeaponClass() == 'qtg_admin_gun' then
+	if !p:IsAdmin() and e:IsNPC() and getActiveWeaponClass(e) == 'qtg_admin_gun' then
 		e:QTGRemove20()
 
 		local lang = GetConVar('QTG_AdminGun_Language')
@@ -306,7 +314,7 @@ hook.Add('EntityFireBullets','QTG_Ent_Timestop_Barrier',function(e,b)
 			end
 		end
 	end
-	if e:IsPlayer() and e:GetActiveWeaponClass() == 'qtg_admin_gun' then
+	if e:IsPlayer() and getActiveWeaponClass(e) == 'qtg_admin_gun' then
 		return true
 	end
 end)
