@@ -6,6 +6,8 @@ local glow3 = CreateMaterial("glow3", "UnlitGeneric", {["$basetexture"] = "sprit
 
 function EFFECT:Init(data)
 	local start = data:GetOrigin()
+
+	self.start = start
 	self.lifetime = CurTime() + 70
 	
 	self.radius = 600
@@ -192,7 +194,9 @@ function EFFECT:Init(data)
 		p:SetVelocity(((pos - start):GetNormal() * math.random(-40, 40)) + Vector(0, 0, 2500))
 		
 		timer.Create("stopshit" .. math.random(-1337, 1337) .. i, i / 70, 1, function()
-			p:SetVelocity(Vector(0, 0, 0))
+			if p then
+				p:SetVelocity(Vector(0, 0, 0))
+			end
 		end)
 		
 		rand = math.random(-1900, 1900)
@@ -213,6 +217,8 @@ function EFFECT:Init(data)
 	end
 	
 	timer.Simple(4, function()
+		if not self or not self.Emitter then return end
+
 		for i = 1, 380 do
 			local vec = VectorRand()
 			vec.z = 0
@@ -256,7 +262,8 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:createMush(text, pos, vel, col)
-	local p = self.Emitter:Add(text, start + pos)
+	local p = self.Emitter:Add(text, self.start + pos)
+
 	p:SetDieTime(math.Rand(20, 25))
 	p:SetStartAlpha(255)
 	p:SetEndAlpha(0)
@@ -285,6 +292,8 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
+	local start = self.start
+
 	render.SetMaterial(glow1)
 	render.DrawSprite(start, self.glows, self.glows, Color(255, 240, 220, 2 * self.glowsalpha))
 
